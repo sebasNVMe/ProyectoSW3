@@ -1,0 +1,6 @@
+export enum RoleUserEnum {
+  PROFESSIONAL = 'PROFESSIONAL',
+  ADMIN = 'ADMIN',
+  PATIENT = 'PATIENT',
+  SCHEDULER = 'SCHEDULER',
+}
