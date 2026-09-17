@@ -8,15 +8,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { User, StatusUserEnum } from './entities/user.entity.js';
-import { RoleUserEnum } from './enums/roleUser.enum.js';
-import { RegisterUserDto } from './dto/registerUser.dto.js';
-import { LoginRequestDto } from './dto/loginRequest.dto.js';
-import { LoginResponseDto } from './dto/loginResponse.dto.js';
-import { UpdateUserDto } from './dto/updateUser.dto.js';
+import { User, StatusUserEnum } from '../entities/user.entity.js';
+import { RoleUserEnum } from '../enums/roleUser.enum.js';
+import { RegisterUserDto } from '../dto/registerUser.dto.js';
+import { LoginRequestDto } from '../dto/loginRequest.dto.js';
+import { LoginResponseDto } from '../dto/loginResponse.dto.js';
+import { UpdateUserDto } from '../dto/updateUser.dto.js';
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService,
