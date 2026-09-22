@@ -14,6 +14,7 @@ import { RegisterUserDto } from '../dto/registerUser.dto.js';
 import { LoginRequestDto } from '../dto/loginRequest.dto.js';
 import { LoginResponseDto } from '../dto/loginResponse.dto.js';
 import { UpdateUserDto } from '../dto/updateUser.dto.js';
+import { ApiResponseDto } from '../../commons/dto/apiResponse.dto.js';
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,7 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-  async register(dto: RegisterUserDto): Promise<User> {
+  async register(dto: RegisterUserDto): Promise<ApiResponseDto<User>> {
     const exists = await this.userRepository.findOneBy({
       cedUser: dto.cedUser,
     });
@@ -38,7 +39,8 @@ export class UserService {
       statusUser: StatusUserEnum.ACTIVE,
     });
 
-    return this.userRepository.save(user);
+    const saved = await this.userRepository.save(user);
+    return new ApiResponseDto('Usuario registrado exitosamente', saved);
   }
 
   async login(dto: LoginRequestDto): Promise<LoginResponseDto> {
@@ -90,7 +92,7 @@ export class UserService {
     return count > 0;
   }
 
-  async update(id: number, dto: UpdateUserDto): Promise<User> {
+  async update(id: number, dto: UpdateUserDto): Promise<ApiResponseDto<User>> {
     const user = await this.userRepository.findOneBy({ codUser: id });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
@@ -101,15 +103,16 @@ export class UserService {
     }
 
     Object.assign(user, dto);
-    return this.userRepository.save(user);
+    const saved = await this.userRepository.save(user);
+    return new ApiResponseDto('Usuario actualizado exitosamente', saved);
   }
 
-  async deactivate(id: number): Promise<void> {
+  async deactivate(id: number): Promise<ApiResponseDto<null>> {
     const user = await this.userRepository.findOneBy({ codUser: id });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-    user.statusUser = StatusUserEnum.INACTIVE;
     await this.userRepository.save(user);
+    return new ApiResponseDto('Usuario desactivado exitosamente', null);
   }
 }
