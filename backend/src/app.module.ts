@@ -5,6 +5,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PeopleModule } from './people/people.module.js';
+import { AppointmentModule } from './appointment/appointment.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PeopleModule } from './people/people.module.js';
     }),
     AuthModule,
     PeopleModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
