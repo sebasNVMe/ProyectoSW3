@@ -12,7 +12,7 @@ export default function LoginView() {
 
     const initialValues: LoginForm = {
         cedUser: 0,
-        password: ''
+        passwordUser: ''
     }
 
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
@@ -34,18 +34,21 @@ export default function LoginView() {
         <>
             <form
                 onSubmit={handleSubmit(handleLogin)}
-                className="max-w-lg mx-auto bg-white px-5 py-10 rounded-2xl space-y-10 mt-10 shadow-xl"
+                className="max-w-lg mx-auto bg-white px-10 py-10 rounded-2xl space-y-10 mt-10 shadow-xl"
                 noValidate
             >
-                <h1 className="text-2xl text-center text-black font-bold font-sans">Bienvenido de nuevo</h1>
-                <p className="text-lg text-center text-slate-500 font-sans">Ingresa a tu portal de salud piedrazul</p>
+
+                <div>
+                    <h1 className="text-2xl text-center text-black font-bold pb-2">Bienvenido de nuevo</h1>
+                    <p className="text-lg text-center text-slate-500 mt-0">Ingresa a tu portal de salud piedrazul</p>
+                </div>
                 <div className="grid grid-cols-1 space-y-3">
-                    <label htmlFor="cedUser" className="text-lg text-black">Número de cedula</label>
+                    <label htmlFor="cedUser" className="text-lg font-medium text-slate-800">Número de cedula</label>
                     <input
                         id="cedUser"
                         type="number"
                         placeholder="Ej: 12345678"
-                        className="border-solid border p-3 rounded-xl placeholder-slate-400"
+                        className="border-solid border p-3 rounded-xl placeholder-slate-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
                         {...register("cedUser", {
                             required: "El número de cedula es obligatorio",
                         })}
@@ -56,36 +59,40 @@ export default function LoginView() {
 
                 </div>
                 <div className="grid grid-cols-1 space-y-3">
-                    <label htmlFor="password" className="text-lg text-black">Contraseña</label>
+                    <div className="flex justify-between items-center">
+                        <label htmlFor="passwordUser" className="text-lg font-medium text-slate-800 ">Contraseña</label>
+                        <Link to="/" className="text-sm text-custom-blue hover:underline">
+                            ¿Olvidaste tu contraseña?
+                        </Link>
+                    </div>
                     <input
-                        id="password"
+                        id="passwordUser"
                         type="password"
                         placeholder="&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;"
-                        className="border-solid border p-3 rounded-xl placeholder-slate-400"
-                        {...register("password", {
+                        className="border-solid border p-3 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                        {...register("passwordUser", {
                             required: "La contraseña es obligatoria",
                         })}
                     />
-                    {errors.password && (
-                        <ErrorMessage>{errors.password.message}</ErrorMessage>
+                    {errors.passwordUser && (
+                        <ErrorMessage>{errors.passwordUser.message}</ErrorMessage>
                     )}
 
                 </div>
 
                 <input
                     type="submit"
-                    className="bg-custom-blue p-3 text-lg w-full text-white rounded-lg font-sans font-semibold cursor-pointer"
+                    className="bg-custom-blue p-3 text-lg w-full text-white rounded-lg font-semibold cursor-pointer"
                     value='Iniciar Sesión'
                 />
 
-                <nav className="mt-10">
+                <nav className="mt-10 pb-2">
                     <Link
                         className="text-center text-slate-500 text-lg block"
                         to="/auth/register"
-                    >¿Aún no tienes una cuenta? <span className="text-custom-blue font-sans font-semibold">Registrate aquí </span></Link>
+                    >¿Aún no tienes cuenta? <span className="text-custom-blue font-semibold">Regístrate aquí</span></Link>
                 </nav>
             </form>
-
         </>
     )
 }

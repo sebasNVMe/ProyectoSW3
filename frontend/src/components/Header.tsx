@@ -1,7 +1,8 @@
 
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import HomeNavigation from "./HomeNavigation";
+import UserNavigation from "./UserNavigation";
 
 
 export default function Header() {
@@ -9,17 +10,17 @@ export default function Header() {
     const location = useLocation()
 
     return (
-        <header className="bg-white py-5">
-            <div className="mx-auto max-w-5xl flex flex-col md:flex-row items-center md:justify-between">
-                <div className="w-full p-3 lg:p-0 md:w-1/3">
+        <header className="bg-white py-4 shadow-sm sticky top-0 z-50">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+                <div className="flex-shrink-0">
                     <Logo />
                 </div>
-                <nav className="md:w-1/3 md:flex md:justify-end">
-                    {location.pathname === '/' ? <HomeNavigation /> : <AdminNavigation />}
-                </nav>
-                <nav className="md:w-1/3 md:flex md:justify-end">
+                <nav className="flex items-center">
+                    {location.pathname === '/' ? <HomeNavigation /> : <UserNavigation />}
                 </nav>
             </div>
         </header>
+
+
     )
 }

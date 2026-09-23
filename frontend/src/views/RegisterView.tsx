@@ -38,9 +38,7 @@ export default function RegisterView() {
             <div className="w-5/12 bg-[#1a1b3f] p-10 text-white flex flex-col relative overflow-hidden">
                 <div className="relative z-10 space-y-8 mt-5">
                     <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
+                        <svg width="64px" height="64px" viewBox="-7.2 -7.2 38.40 38.40" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.94286 3C7.52858 3 5.57143 4.95716 5.57143 7.37143C5.57143 9.7857 7.52858 11.7429 9.94286 11.7429C12.3571 11.7429 14.3143 9.7857 14.3143 7.37143C14.3143 4.95716 12.3571 3 9.94286 3Z" fill="#ffffff"></path> <path d="M12.5226 13.6877C10.8136 13.4149 9.07213 13.4149 7.36313 13.6877L7.17994 13.7169C4.77189 14.1012 3 16.1783 3 18.6168C3 19.933 4.06698 21 5.38317 21H14.5025C15.8187 21 16.8857 19.933 16.8857 18.6168C16.8857 16.1783 15.1138 14.1012 12.7058 13.7169L12.5226 13.6877Z" fill="#ffffff"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M18.1714 9.17143C18.5975 9.17143 18.9429 9.51681 18.9429 9.94286V11.2286H20.2286C20.6546 11.2286 21 11.574 21 12C21 12.426 20.6546 12.7714 20.2286 12.7714H18.9429V14.0571C18.9429 14.4832 18.5975 14.8286 18.1714 14.8286C17.7454 14.8286 17.4 14.4832 17.4 14.0571V12.7714H16.1143C15.6882 12.7714 15.3429 12.426 15.3429 12C15.3429 11.574 15.6882 11.2286 16.1143 11.2286H17.4V9.94286C17.4 9.51681 17.7454 9.17143 18.1714 9.17143Z" fill="#ffffff"></path> </g></svg>
                     </div>
 
                     <h1 className="text-3xl font-bold leading-snug tracking-wide">Únete a<br />Piedrazul</h1>
@@ -48,40 +46,29 @@ export default function RegisterView() {
                     <ul className="space-y-6 mt-8">
                         <li className="flex gap-4">
                             <div className="mt-1">
-                                <div className="w-5 h-5 rounded-full bg-custom-blue flex items-center justify-center">
-                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                <div className="w-5 h-5 rounded-full bg-indigo-400 flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-custom-dark" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                 </div>
                             </div>
                             <p className="text-[15px] font-light text-slate-300 leading-relaxed">Agenda citas de forma autónoma 24/7.</p>
                         </li>
                         <li className="flex gap-4">
                             <div className="mt-1">
-                                <div className="w-5 h-5 rounded-full bg-custom-blue flex items-center justify-center">
-                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                <div className="w-5 h-5 rounded-full bg-indigo-400 flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-custom-dark" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                 </div>
                             </div>
                             <p className="text-[15px] font-light text-slate-300 leading-relaxed">Accede a tu historial de consultas.</p>
                         </li>
                         <li className="flex gap-4">
                             <div className="mt-1">
-                                <div className="w-5 h-5 rounded-full bg-custom-blue flex items-center justify-center">
-                                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                <div className="w-5 h-5 rounded-full bg-indigo-400 flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-custom-dark" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                                 </div>
                             </div>
                             <p className="text-[15px] font-light text-slate-300 leading-relaxed">Recibe recordatorios automáticos.</p>
                         </li>
                     </ul>
-                </div>
-
-                {/* Decoraciones del fondo */}
-                <div className="absolute -bottom-12 -left-6 opacity-10 pointer-events-none text-white">
-                    <svg width="250" height="250" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12.5 6.5h-1V3h-2v3.5h-3.5v2h3.5v3.5h2v-3.5h3.5v-2h-2.5z" />
-                        <path d="M21.5 13.5v-2h-3v-3h-2v3h-3v2h3v3h2v-3h3z" />
-                        <path d="M19 16.5c-2.5 0-4.5 2-4.5 4.5h2c0-1.38 1.12-2.5 2.5-2.5v-2z" />
-                        <path d="M5 16.5c-1.38 0-2.5 1.12-2.5 2.5h2c0-2.5 2-4.5 4.5-4.5v-2c-2.21 0-4 1.79-4 4z" />
-                        <path d="M3.72 15C1.64 15 0 16.64 0 18.72S1.64 22.44 3.72 22.44H20.28c2.08 0 3.72-1.64 3.72-3.72S22.36 15 20.28 15h-16.56zm14.36 5H5.92c-.99 0-1.8-.81-1.8-1.8s.81-1.8 1.8-1.8h12.16c.99 0 1.8.81 1.8 1.8s-.81 1.8-1.8 1.8z" />
-                    </svg>
                 </div>
             </div>
 
@@ -132,7 +119,7 @@ export default function RegisterView() {
                                 id="cedUser"
                                 type="number"
                                 placeholder="12345678"
-                                className="w-full bg-white border border-slate-300 p-2.5 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                                className="w-full bg-white border border-slate-300 p-2.5 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 {...register('cedUser', {
                                     required: "La cédula es obligatoria",
                                     valueAsNumber: true,
