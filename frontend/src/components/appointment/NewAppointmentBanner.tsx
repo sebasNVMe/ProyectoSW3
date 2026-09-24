@@ -1,6 +1,9 @@
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export default function NewAppointmentBanner() {
+    const navigate = useNavigate();
+
     return (
         <div className="bg-gradient-to-br from-custom-blue to-custom-indigo rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
             {/* Decoración de fondo */}
@@ -14,6 +17,7 @@ export default function NewAppointmentBanner() {
                 </p>
                 <button
                     type="button"
+                    onClick={() => navigate('/schedule-appointment')}
                     className="flex items-center gap-2 bg-white text-custom-blue font-semibold
                                         py-2.5 px-5 rounded-lg transition-all hover:bg-indigo-50
                                         shadow-md cursor-pointer active:scale-[0.98] w-full justify-center"

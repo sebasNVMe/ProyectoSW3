@@ -4,6 +4,7 @@ import AuthLayout from "./layout/AuthLayout";
 import LoginView from "./views/LoginView";
 import RegisterView from "./views/RegisterView";
 import ScheduleAppointmentView from "./views/ScheduleAppointmentView";
+import MyAppointmentsView from "./views/MyAppointmentsView";
 import UserLayout from "./layout/UserLayout";
 
 
@@ -16,7 +17,8 @@ export default function Router() {
                     <Route path='/auth/register' element={<RegisterView />} />
                 </Route>
                 <Route element={<UserLayout />}>
-                    <Route path='/schedule-appointment' element={< ScheduleAppointmentView />} />
+                    <Route path='/my-appointments' element={<MyAppointmentsView />} />
+                    <Route path='/schedule-appointment' element={<ScheduleAppointmentView />} />
                 </Route>
                 <Route path='/' element={<HomeView />} />
             </Routes>
