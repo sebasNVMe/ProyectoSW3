@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { Toaster } from "sonner"
-import Logo from "../components/Logo"
+
 export default function AuthLayout() {
     return (
         <>

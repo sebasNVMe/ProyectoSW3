@@ -1,34 +1,9 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { isAxiosError } from "axios"
+import { Link } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage"
-import type { LoginForm } from "../types"
-import api from "../config/axios"
-
-
+import { useLoginViewModel } from "../viewmodels/useLoginViewModel"
 
 export default function LoginView() {
-
-    const initialValues: LoginForm = {
-        cedUser: 0,
-        passwordUser: ''
-    }
-
-    const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
-    const navigate = useNavigate()
-
-    const handleLogin = async (formData: LoginForm) => {
-        try {
-            const { data } = await api.post('/auth/login', formData)
-            localStorage.setItem('AUTH_TOKEN', data)
-            navigate('/')
-        } catch (error) {
-            if (isAxiosError(error) && error.response) {
-                toast.error(error.response.data.error)
-            }
-        }
-    }
+    const { register, handleSubmit, errors, handleLogin } = useLoginViewModel()
 
     return (
         <>
