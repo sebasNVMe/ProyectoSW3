@@ -12,5 +12,6 @@ import { ProfessionalService } from './services/professional.service.js';
   imports: [TypeOrmModule.forFeature([Patient, Professional, User])],
   controllers: [PatientController, ProfessionalController],
   providers: [PatientService, ProfessionalService],
+  exports: [PatientService, ProfessionalService],
 })
 export class PeopleModule {}

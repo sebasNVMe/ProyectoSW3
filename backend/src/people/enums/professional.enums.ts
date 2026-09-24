@@ -1,8 +1,3 @@
-/** Values intentionally mirror the Spring Boot service contract. */
-export enum StatusProfEnum {
-  Active = 'Active',
-  Inactive = 'Inactive',
-}
 
 export enum TypeProfEnum {
   Doctor = 'Doctor',

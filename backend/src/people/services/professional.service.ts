@@ -1,11 +1,11 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../auth/entities/user.entity.js';
+import { StatusUserEnum, User } from '../../auth/entities/user.entity.js';
 import { CreateProfessionalDto } from '../dto/create-professional.dto.js';
 import { UpdateProfessionalDto } from '../dto/update-professional.dto.js';
 import { Professional } from '../entities/professional.entity.js';
-import { SpecialityProfEnum, StatusProfEnum } from '../enums/professional.enums.js';
+import { SpecialityProfEnum,TypeProfEnum} from '../enums/professional.enums.js';
 
 @Injectable()
 export class ProfessionalService {
@@ -15,13 +15,18 @@ export class ProfessionalService {
   ) {}
 
   async register(dto: CreateProfessionalDto): Promise<Professional> {
-    const user = await this.users.findOneBy({ codUser: dto.codUser });
+    const user = await this.users.findOneBy({ cedUser: dto.cedUser });
     if (!user) throw new ConflictException('No existe un usuario con ese código');
-    if (await this.professionals.exists({ where: { user: { codUser: dto.codUser } } })) {
-      throw new ConflictException('Ya existe un profesional con ese usuario');
-    }
     this.validateSchedule(dto.arrivalTime, dto.departureTime);
-    const professional = await this.professionals.save(this.professionals.create({ ...dto, user, statusProf: StatusProfEnum.Active }));
+    const professional = await this.professionals.save(this.professionals.create({ 
+      user, 
+      typeProf: dto.typeProf, 
+      specialityProf: dto.specialityProf,
+      arrivalTime:dto.arrivalTime,
+      departureTime: dto.departureTime,
+      attentionInterval: dto.attentionInterval,
+      unavailableDays: dto.unavailableDays,
+    }));
     return professional;
   }
 
@@ -29,10 +34,10 @@ export class ProfessionalService {
   findByCodProf(codProf: number): Promise<Professional | null> { return this.professionals.findOneBy({ codProf }); }
   findBySpeciality(specialityProf: SpecialityProfEnum): Promise<Professional[]> { return this.professionals.findBy({ specialityProf }); }
 
-  async findByCodUser(codUser: number): Promise<Professional | null> {
-    const user = await this.users.findOneBy({ codUser });
-    if (!user) throw new NotFoundException(`Usuario no encontrado: ${codUser}`);
-    return this.professionals.findOne({ where: { user: { codUser } } });
+  async findByCedUser(cedUser: number): Promise<Professional | null> {
+    const user = await this.users.findOneBy({ cedUser });
+    if (!user) throw new NotFoundException(`Usuario no encontrado: ${cedUser}`);
+    return this.professionals.findOne({ where: { user: { cedUser } } });
   }
 
   async update(codProf: number, dto: UpdateProfessionalDto): Promise<Professional> {
@@ -49,7 +54,7 @@ export class ProfessionalService {
   async deactivate(codProf: number): Promise<void> {
     const professional = await this.findByCodProf(codProf);
     if (!professional) throw new NotFoundException('Profesional no encontrado');
-    professional.statusProf = StatusProfEnum.Inactive;
+    professional.user.statusUser = StatusUserEnum.INACTIVE;
     await this.professionals.save(professional);
   }
 

@@ -1,25 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../auth/entities/user.entity.js';
-import { SpecialityProfEnum, StatusProfEnum, TypeProfEnum } from '../enums/professional.enums.js';
+import { SpecialityProfEnum, TypeProfEnum } from '../enums/professional.enums.js';
 
 @Entity('professionals')
-export class Professional {
+export class Professional{
   @PrimaryGeneratedColumn()
   codProf: number;
 
-  /** The user remains owned by Auth; this is the former USER_REF relation. */
-  @ManyToOne(() => User, { eager: true, nullable: false })
-  @JoinColumn({ name: 'codUser' })
+  @OneToOne(() => User, {nullable: true})
+  @JoinColumn({name: 'codUser'})
   user: User;
-
-  @Column()
-  genProf: string;
-
-  @Column({ nullable: true })
-  phoneProf: string | null;
-
-  @Column({ type: 'enum', enum: StatusProfEnum, default: StatusProfEnum.Active })
-  statusProf: StatusProfEnum;
 
   @Column({ type: 'enum', enum: TypeProfEnum })
   typeProf: TypeProfEnum;
@@ -36,6 +26,7 @@ export class Professional {
   @Column()
   attentionInterval: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   unavailableDays: string | null;
+  
 }
