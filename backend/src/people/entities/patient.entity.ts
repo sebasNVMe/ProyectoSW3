@@ -1,32 +1,17 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import {User} from '../../auth/entities/user.entity.js';
 
 @Entity('patients')
-export class Patient {
+export class Patient{
+
   @PrimaryGeneratedColumn()
   codPatient: number;
 
-  @Index({ unique: true })
-  @Column()
-  idPatient: number;
-
-  @Column()
-  namePatient: string;
-
-  @Column({ nullable: true })
-  secondNamePatient: string | null;
-
-  @Column()
-  lastNamePatient: string;
-
-  @Column({ nullable: true })
-  secondLastNamePatient: string | null;
-
-  @Column({ nullable: true, type: 'bigint' })
-  phonePatient: string | null;
+  @OneToOne(() => User, {nullable: true})
+  @JoinColumn({name: 'codUser'})
+  user: User;
 
   @Column({ nullable: true, type: 'date' })
   dateBirthPatient: string | null;
 
-  @Column()
-  genderPatient: string;
 }

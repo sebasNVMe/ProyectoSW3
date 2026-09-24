@@ -4,46 +4,70 @@ import { Repository } from 'typeorm';
 import { CreatePatientDto } from '../dto/create-patient.dto.js';
 import { UpdatePatientDto } from '../dto/update-patient.dto.js';
 import { Patient } from '../entities/patient.entity.js';
+import { StatusUserEnum, User } from '../../auth/entities/user.entity.js';
+import { RoleUserEnum } from '../../auth/enums/roleUser.enum.js';
 
 @Injectable()
 export class PatientService {
   constructor(
     @InjectRepository(Patient) private readonly patients: Repository<Patient>,
+    @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
 
   async register(dto: CreatePatientDto): Promise<Patient> {
-    if (await this.patients.existsBy({ idPatient: dto.idPatient })) {
-      throw new ConflictException('Ya existe un paciente con esa identificación');
+    const user = await this.users.findOneBy({ cedUser: dto.cedUser })
+    if (!user) {
+      throw new ConflictException('No existe ningun usuario con esa identificación');
     }
+    user.roleUser = RoleUserEnum.PATIENT;
+    user.statusUser = StatusUserEnum.ACTIVE;
     const patient = await this.patients.save(this.patients.create({
-      ...dto,
-      phonePatient: dto.phonePatient?.toString(),
+      user,
+      dateBirthPatient: dto.dateBirthPatient,
     }));
     return patient;
   }
 
   findAll(): Promise<Patient[]> { return this.patients.find(); }
-  findByIdPatient(idPatient: number): Promise<Patient | null> { return this.patients.findOneBy({ idPatient }); }
+
+  async findByIdPatient(cedUser: number): Promise<Patient | null> {
+    return this.patients.findOne({
+      where: {
+        user: {
+          cedUser: cedUser
+        }
+      }
+    });
+  }
+
   findByCodPatient(codPatient: number): Promise<Patient | null> { return this.patients.findOneBy({ codPatient }); }
 
-  async update(codPatient: number, dto: UpdatePatientDto): Promise<Patient> {
-    const patient = await this.findByCodPatient(codPatient);
+  async update(cedUser: number, dto: UpdatePatientDto): Promise<Patient> {
+    const patient = await this.findByIdPatient(cedUser);
     if (!patient) throw new NotFoundException('Paciente no encontrado');
-    const { phonePatient, ...fields } = dto;
+    const { phoneUser, ...fields } = dto;
     Object.assign(patient, this.withoutNulls(fields));
-    if (phonePatient !== undefined && phonePatient !== null) {
-      patient.phonePatient = phonePatient.toString();
+    if (phoneUser !== undefined && phoneUser !== null) {
+      patient.user.phoneUser = phoneUser.toString();
     }
     const updated = await this.patients.save(patient);
     return updated;
   }
 
-  async delete(codPatient: number): Promise<void> {
-    const result = await this.patients.delete(codPatient);
-    if (!result.affected) throw new NotFoundException('Paciente no encontrado');
+  async deactivate(cedUser: number): Promise<void> {
+    const result = await this.patients.findOne({
+      where: {
+        user: {
+          cedUser: cedUser
+        }
+      }
+    });
+    if (!result) throw new NotFoundException('Paciente no encontrado');
+    result.user.statusUser = StatusUserEnum.INACTIVE;
+    await this.patients.save(result);
   }
 
-  /** Spring's partial-update DTO ignores fields explicitly sent as null. */
+
   private withoutNulls<T extends object>(fields: T): Partial<T> {
     return Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== null && value !== undefined)) as Partial<T>;
   }
