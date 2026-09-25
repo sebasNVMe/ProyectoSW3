@@ -6,6 +6,8 @@ import RegisterView from "./views/RegisterView";
 import ScheduleAppointmentView from "./views/ScheduleAppointmentView";
 import MyAppointmentsView from "./views/MyAppointmentsView";
 import UserLayout from "./layout/UserLayout";
+import SchedulerView from "./views/SchedulerView";
+import SchedulerLayout from "./layout/SchedulerLayout";
 
 
 export default function Router() {
@@ -19,6 +21,9 @@ export default function Router() {
                 <Route element={<UserLayout />}>
                     <Route path='/my-appointments' element={<MyAppointmentsView />} />
                     <Route path='/schedule-appointment' element={<ScheduleAppointmentView />} />
+                </Route>
+                <Route element={<SchedulerLayout />}>
+                    <Route path='/scheduler' element={<SchedulerView />} />
                 </Route>
                 <Route path='/' element={<HomeView />} />
             </Routes>

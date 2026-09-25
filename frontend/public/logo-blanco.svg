@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
+      
+      .brand-text {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 44px;
+        fill: #FFFFFF; /* Color gris oscuro para buen contraste */
+        letter-spacing: -0.5px;
+      }
+      
+      .brand-icon {
+        fill: #4F46E5; /* Color azul/índigo similar al original */
+      }
+    </style>
+  </defs>
+
+  <!-- Contenedor del Icono -->
+  <g transform="translate(10, 5)">
+    <!-- Cruz médica -->
+    <rect x="36" y="0" width="24" height="52" rx="6" class="brand-icon"/>
+    <rect x="22" y="14" width="52" height="24" rx="6" class="brand-icon"/>
+    
+    <!-- Silueta de la mano -->
+    <path d="M 10 75 
+             Q 15 60 40 60 
+             L 55 60 
+             Q 65 60 70 52 
+             L 92 38 
+             Q 98 34 100 42 
+             L 78 68 
+             Q 68 80 50 85 
+             L 25 85 
+             Q 10 85 10 75 Z" 
+          class="brand-icon"/>
+  </g>
+  
+  <!-- Texto "Piedrazul" -->
+  <text x="125" y="65" class="brand-text">Piedrazul</text>
+</svg>
