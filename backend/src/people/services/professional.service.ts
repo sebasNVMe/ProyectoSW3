@@ -5,24 +5,24 @@ import { StatusUserEnum, User } from '../../auth/entities/user.entity.js';
 import { CreateProfessionalDto } from '../dto/create-professional.dto.js';
 import { UpdateProfessionalDto } from '../dto/update-professional.dto.js';
 import { Professional } from '../entities/professional.entity.js';
-import { SpecialityProfEnum,TypeProfEnum} from '../enums/professional.enums.js';
+import { SpecialityProfEnum, TypeProfEnum } from '../enums/professional.enums.js';
 
 @Injectable()
 export class ProfessionalService {
   constructor(
     @InjectRepository(Professional) private readonly professionals: Repository<Professional>,
     @InjectRepository(User) private readonly users: Repository<User>,
-  ) {}
+  ) { }
 
   async register(dto: CreateProfessionalDto): Promise<Professional> {
     const user = await this.users.findOneBy({ cedUser: dto.cedUser });
     if (!user) throw new ConflictException('No existe un usuario con ese código');
     this.validateSchedule(dto.arrivalTime, dto.departureTime);
-    const professional = await this.professionals.save(this.professionals.create({ 
-      user, 
-      typeProf: dto.typeProf, 
+    const professional = await this.professionals.save(this.professionals.create({
+      user,
+      typeProf: dto.typeProf,
       specialityProf: dto.specialityProf,
-      arrivalTime:dto.arrivalTime,
+      arrivalTime: dto.arrivalTime,
       departureTime: dto.departureTime,
       attentionInterval: dto.attentionInterval,
       unavailableDays: dto.unavailableDays,
@@ -30,7 +30,7 @@ export class ProfessionalService {
     return professional;
   }
 
-  findAll(): Promise<Professional[]> { return this.professionals.find(); }
+  findAll(): Promise<Professional[]> { return this.professionals.find({ relations: { user: true } }); }
   findByCodProf(codProf: number): Promise<Professional | null> { return this.professionals.findOneBy({ codProf }); }
   findBySpeciality(specialityProf: SpecialityProfEnum): Promise<Professional[]> { return this.professionals.findBy({ specialityProf }); }
 

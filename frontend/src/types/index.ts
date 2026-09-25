@@ -12,6 +12,17 @@ export type User = {
     securityAnswer: string
 }
 
+export type Professional = {
+    codProf: number
+    user: User
+    typeProf: string
+    specialityProf: string
+    arrivalTime: string
+    departureTime: string
+    attentionInterval: number
+    unavailableDays: string | null
+}
+
 export type LoginForm = Pick<User, 'cedUser'> & {
     password: string
 }
@@ -20,3 +31,6 @@ export type RegisterForm = Pick<User, 'cedUser' | 'nameUser' | 'lastNameUser' | 
     passwordUser: string
 }
 
+export type RegisterProffesionalForm = Pick<Professional, 'user' | 'typeProf' | 'specialityProf' | 'arrivalTime' | 'departureTime' | 'attentionInterval'> & {
+    passwordUser: string
+}
