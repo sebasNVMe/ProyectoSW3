@@ -35,22 +35,22 @@ export default function LoginView() {
                 </div>
                 <div className="grid grid-cols-1 space-y-3">
                     <div className="flex justify-between items-center">
-                        <label htmlFor="passwordUser" className="text-lg font-medium text-slate-800 ">Contraseña</label>
+                        <label htmlFor="password" className="text-lg font-medium text-slate-800 ">Contraseña</label>
                         <Link to="/" className="text-sm text-custom-blue hover:underline">
                             ¿Olvidaste tu contraseña?
                         </Link>
                     </div>
                     <input
-                        id="passwordUser"
+                        id="password"
                         type="password"
                         placeholder="&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;&#x25cf;"
                         className="border-solid border p-3 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-                        {...register("passwordUser", {
+                        {...register("password", {
                             required: "La contraseña es obligatoria",
                         })}
                     />
-                    {errors.passwordUser && (
-                        <ErrorMessage>{errors.passwordUser.message}</ErrorMessage>
+                    {errors.password && (
+                        <ErrorMessage>{errors.password.message}</ErrorMessage>
                     )}
 
                 </div>

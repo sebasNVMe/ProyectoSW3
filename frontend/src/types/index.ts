@@ -13,7 +13,7 @@ export type User = {
 }
 
 export type LoginForm = Pick<User, 'cedUser'> & {
-    passwordUser: string
+    password: string
 }
 
 export type RegisterForm = Pick<User, 'cedUser' | 'nameUser' | 'lastNameUser' | 'roleUser' | 'phoneUser' | 'genderUser'> & {

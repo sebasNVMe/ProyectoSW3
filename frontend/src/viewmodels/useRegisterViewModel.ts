@@ -19,12 +19,13 @@ export function useRegisterViewModel() {
 
     const handleRegister = async (formData: RegisterForm) => {
         try {
-            const message = await registerUser(formData)
-            toast.success(message)
+            const parsedData = { ...formData, cedUser: Number(formData.cedUser) }
+            const data = await registerUser(parsedData)
+            toast.success(data)
             reset()
         } catch (error) {
             if (isAxiosError(error) && error.response) {
-                toast.error(error.response.data.error)
+                toast.error(error.response.data.message)
             }
         }
     }
