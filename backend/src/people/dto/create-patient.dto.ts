@@ -5,5 +5,5 @@ import { RoleUserEnum } from '../../auth/enums/roleUser.enum.js';
 export class CreatePatientDto {
 
   @IsNotEmpty() @IsNumber() cedUser: number;
-  @IsDateString() dateBirthPatient: string | null;
+  @IsOptional() @IsDateString() dateBirthPatient?: string | null;
 }

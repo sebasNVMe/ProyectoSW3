@@ -22,6 +22,12 @@ export function useLoginViewModel() {
             const loginResponse = await loginUser(parsedData)
             console.log(loginResponse)
             localStorage.setItem('AUTH_TOKEN', loginResponse.token)
+            localStorage.setItem('AUTH_USER', JSON.stringify({
+                role: loginResponse.role,
+                codUser: loginResponse.codUser,
+                cedUser: loginResponse.cedUser,
+                nameUser: loginResponse.nameUser,
+            }))
             queryClient.setQueryData(['user'], {
                 role: loginResponse.role,
                 codUser: loginResponse.codUser,

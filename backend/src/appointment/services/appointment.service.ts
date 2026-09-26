@@ -100,7 +100,7 @@ export class AppointmentService {
   async findByCodPatient(codPatient: number): Promise<Appointment[]> {
     return this.appointmentRepository.find({
       where: { patient: { codPatient } },
-      relations: { patient: true, professional: true },
+      relations: { patient: { user: true }, professional: { user: true } },
     });
   }
 

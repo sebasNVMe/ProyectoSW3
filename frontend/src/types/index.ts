@@ -12,6 +12,12 @@ export type User = {
     securityAnswer: string
 }
 
+export type Patient = {
+    codPatient: number
+    user: User
+    dateBirthPatient: string | null
+}
+
 export type Professional = {
     codProf: number
     user: User
@@ -65,4 +71,22 @@ export type AppointmentSlot = {
     professionalName: string
     specialityProf: string
     typeProf: string
+}
+
+export type CreateAppointmentPayload = {
+    codProf: number
+    codPatient: number
+    dateApp: string
+    timeApp: string
+    descApp?: string
+}
+
+export type Appointment = {
+    codApp: number
+    professional: Professional
+    patient: Patient
+    dateApp: string
+    timeApp: string
+    descApp?: string
+    statusApp: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED'
 }

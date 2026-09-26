@@ -23,6 +23,15 @@ export default function ScheduleAppointmentView() {
         isErrorSlots,
         selectedSlot,
         handleSelectSlot,
+        // Resumen y confirmación
+        showSummary,
+        handleShowSummary,
+        handleModify,
+        handleConfirm,
+        isConfirming,
+        isReadyToConfirm,
+        selectedSpecialtyLabel,
+        selectedDateStr,
     } = useAppointmentViewModel()
 
     return (
@@ -34,7 +43,7 @@ export default function ScheduleAppointmentView() {
                     <NextAppointment />
                 </div>
 
-                {/* Columna derecha — Contenido secuencial (sin stepper) */}
+                {/* Columna derecha — Contenido secuencial */}
                 <div className="lg:col-span-8 space-y-6">
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-10">
                         {/* Título */}
@@ -43,36 +52,68 @@ export default function ScheduleAppointmentView() {
                             <p className="text-sm text-gray-500 mt-1">Completa los siguientes pasos para agendar tu cita médica.</p>
                         </div>
 
-                        <SpecialtySelector
-                            specialties={specialties}
-                            selectedSpeciality={selectedSpeciality}
-                            onSelect={handleSelectSpeciality}
-                        />
+                        {showSummary && selectedProfessional && selectedDateStr && selectedSlot ? (
+                            /* ── Paso 4: Resumen y confirmación ── */
+                            <div className="pt-2">
+                                <AppointmentSummary
+                                    specialtyLabel={selectedSpecialtyLabel}
+                                    selectedProfessional={selectedProfessional}
+                                    selectedDateStr={selectedDateStr}
+                                    selectedSlot={selectedSlot}
+                                    isConfirming={isConfirming}
+                                    onConfirm={handleConfirm}
+                                    onModify={handleModify}
+                                />
+                            </div>
+                        ) : (
+                            /* ── Pasos 1-3: Selección de datos ── */
+                            <>
+                                <SpecialtySelector
+                                    specialties={specialties}
+                                    selectedSpeciality={selectedSpeciality}
+                                    onSelect={handleSelectSpeciality}
+                                />
 
-                        <DoctorSelector
-                            selectedSpeciality={selectedSpeciality}
-                            professionals={professionals}
-                            isLoading={isLoadingProfessionals}
-                            isError={isErrorProfessionals}
-                            selectedProfessional={selectedProfessional}
-                            onSelect={handleSelectProfessional}
-                        />
+                                <DoctorSelector
+                                    selectedSpeciality={selectedSpeciality}
+                                    professionals={professionals}
+                                    isLoading={isLoadingProfessionals}
+                                    isError={isErrorProfessionals}
+                                    selectedProfessional={selectedProfessional}
+                                    onSelect={handleSelectProfessional}
+                                />
 
-                        <TimeSlotSelector
-                            selectedProfessional={selectedProfessional}
-                            selectedDate={selectedDate}
-                            onSelectDate={handleSelectDate}
-                            disabledDaysOfWeek={disabledDaysOfWeek}
-                            availableSlots={availableSlots}
-                            isLoadingSlots={isLoadingSlots}
-                            isErrorSlots={isErrorSlots}
-                            selectedSlot={selectedSlot}
-                            onSelectSlot={handleSelectSlot}
-                        />
+                                <TimeSlotSelector
+                                    selectedProfessional={selectedProfessional}
+                                    selectedDate={selectedDate}
+                                    onSelectDate={handleSelectDate}
+                                    disabledDaysOfWeek={disabledDaysOfWeek}
+                                    availableSlots={availableSlots}
+                                    isLoadingSlots={isLoadingSlots}
+                                    isErrorSlots={isErrorSlots}
+                                    selectedSlot={selectedSlot}
+                                    onSelectSlot={handleSelectSlot}
+                                />
 
-                        <div className="pt-6 border-t border-gray-100">
-                            <AppointmentSummary />
-                        </div>
+                                {/* Botón para ir al resumen */}
+                                <div className="pt-6 border-t border-gray-100">
+                                    <button
+                                        id="btn-go-to-summary"
+                                        type="button"
+                                        onClick={handleShowSummary}
+                                        disabled={!isReadyToConfirm}
+                                        className="w-full bg-custom-blue hover:bg-custom-indigo disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 cursor-pointer active:scale-[0.98]"
+                                    >
+                                        Continuar al resumen →
+                                    </button>
+                                    {!isReadyToConfirm && (
+                                        <p className="text-xs text-center text-gray-400 mt-2">
+                                            Selecciona especialidad, médico, fecha y hora para continuar.
+                                        </p>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
