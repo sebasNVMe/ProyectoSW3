@@ -31,8 +31,8 @@ export class ProfessionalService {
   }
 
   findAll(): Promise<Professional[]> { return this.professionals.find({ relations: { user: true } }); }
-  findByCodProf(codProf: number): Promise<Professional | null> { return this.professionals.findOneBy({ codProf }); }
-  findBySpeciality(specialityProf: SpecialityProfEnum): Promise<Professional[]> { return this.professionals.findBy({ specialityProf }); }
+  findByCodProf(codProf: number): Promise<Professional | null> { return this.professionals.findOne({ where: { codProf }, relations: { user: true } }); }
+  findBySpeciality(specialityProf: SpecialityProfEnum): Promise<Professional[]> { return this.professionals.find({ where: { specialityProf }, relations: { user: true } }); }
 
   async findByCedUser(cedUser: number): Promise<Professional | null> {
     const user = await this.users.findOneBy({ cedUser });

@@ -1,5 +1,6 @@
 import api from "../config/axios"
 import type { Professional, RegisterProffesionalForm } from "../types"
+import { type SpecialityProfEnum } from "../types"
 
 export async function registerProfessional(formData: RegisterProffesionalForm): Promise<string> {
     const userPayload = {
@@ -27,6 +28,11 @@ export async function registerProfessional(formData: RegisterProffesionalForm): 
 
 export async function getAllProfessionals(): Promise<Professional[]> {
     const { data } = await api.get<Professional[]>('/professionals')
+    return data
+}
+
+export async function getProfessionalsBySpeciality(speciality: SpecialityProfEnum): Promise<Professional[]> {
+    const { data } = await api.get<Professional[]>(`/professionals/speciality/${speciality}`)
     return data
 }
 

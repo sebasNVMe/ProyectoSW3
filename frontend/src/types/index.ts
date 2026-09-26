@@ -34,3 +34,35 @@ export type RegisterForm = Pick<User, 'cedUser' | 'nameUser' | 'lastNameUser' | 
 export type RegisterProffesionalForm = Pick<Professional, 'user' | 'typeProf' | 'specialityProf' | 'arrivalTime' | 'departureTime' | 'attentionInterval'> & {
     passwordUser: string
 }
+
+export type LoginResponse = {
+    token: string;
+    role: string;
+    codUser: number;
+    cedUser: number;
+    nameUser: string;
+}
+
+export const SpecialityProfEnum = {
+    Neural_Therapy: 'Neural_Therapy',
+    Chiropractor: 'Chiropractor',
+    Physiotherapy: 'Physiotherapy',
+    General: 'General',
+} as const;
+
+export type SpecialityProfEnum = (typeof SpecialityProfEnum)[keyof typeof SpecialityProfEnum];
+
+export type Specialty = {
+    value: SpecialityProfEnum
+    label: string
+    description: string
+}
+
+export type AppointmentSlot = {
+    codProf: number
+    dateApp: string
+    timeApp: string
+    professionalName: string
+    specialityProf: string
+    typeProf: string
+}

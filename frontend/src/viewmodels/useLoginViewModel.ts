@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { isAxiosError } from "axios"
 import type { LoginForm } from "../types"
@@ -13,13 +14,20 @@ export function useLoginViewModel() {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues: initialValues })
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const handleLogin = async (formData: LoginForm) => {
         try {
             const parsedData = { ...formData, cedUser: Number(formData.cedUser) }
-            const token = await loginUser(parsedData)
-            console.log(token)
-            localStorage.setItem('AUTH_TOKEN', token)
+            const loginResponse = await loginUser(parsedData)
+            console.log(loginResponse)
+            localStorage.setItem('AUTH_TOKEN', loginResponse.token)
+            queryClient.setQueryData(['user'], {
+                role: loginResponse.role,
+                codUser: loginResponse.codUser,
+                cedUser: loginResponse.cedUser,
+                nameUser: loginResponse.nameUser
+            })
             navigate('/schedule-appointment')
         } catch (error) {
             if (isAxiosError(error) && error.response) {

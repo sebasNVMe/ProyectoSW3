@@ -1,53 +1,46 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { type SpecialityProfEnum, type Specialty } from '../../types'
 
-export default function SpecialtySelector() {
+type Props = {
+    specialties: Specialty[]
+    selectedSpeciality: SpecialityProfEnum | null
+    onSelect: (speciality: SpecialityProfEnum) => void
+}
+
+export default function SpecialtySelector({ specialties, selectedSpeciality, onSelect }: Props) {
     return (
         <div className="space-y-4">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                 1. Elige tu especialidad
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Botón Seleccionado */}
-                <button
-                    type="button"
-                    className="relative flex items-start gap-4 p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer group border-custom-blue bg-indigo-50 shadow-md shadow-indigo-100"
-                >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 bg-custom-blue">
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/3209/3209074.png"
-                            alt="Cardiología"
-                            className="w-6 h-6 brightness-0 invert"
-                        />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-custom-blue">Cardiología</p>
-                        <p className="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">
-                            Especialidad médica que se ocupa de las afecciones del corazón y del aparato circulatorio.
-                        </p>
-                    </div>
-                    <CheckCircleIcon className="w-6 h-6 text-custom-blue absolute top-3 right-3" />
-                </button>
-
-                {/* Botón No Seleccionado */}
-                <button
-                    type="button"
-                    className="relative flex items-start gap-4 p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer group border-gray-200 bg-white hover:border-indigo-300 hover:shadow-sm"
-                >
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200 bg-indigo-100 group-hover:bg-indigo-200">
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png"
-                            alt="Pediatría"
-                            className="w-6 h-6"
-                        />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-900">Pediatría</p>
-                        <p className="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">
-                            Especialidad médica que estudia al niño y sus enfermedades.
-                        </p>
-                    </div>
-                </button>
+            <div className="grid grid-cols-1 gap-4">
+                {specialties.map((specialty) => {
+                    const isSelected = selectedSpeciality === specialty.value
+                    return (
+                        <button
+                            key={specialty.value}
+                            type="button"
+                            onClick={() => onSelect(specialty.value)}
+                            className={`relative flex items-center p-5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer group ${isSelected
+                                    ? 'border-custom-blue bg-indigo-50 shadow-md shadow-indigo-100'
+                                    : 'border-gray-200 bg-white hover:border-indigo-300 hover:shadow-sm'
+                                }`}
+                        >
+                            <div className="flex-1 min-w-0 pr-8">
+                                <p className={`font-semibold text-sm ${isSelected ? 'text-custom-blue' : 'text-gray-900'}`}>
+                                    {specialty.label}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">
+                                    {specialty.description}
+                                </p>
+                            </div>
+                            {isSelected && (
+                                <CheckCircleIcon className="w-6 h-6 text-custom-blue absolute right-5" />
+                            )}
+                        </button>
+                    )
+                })}
             </div>
         </div>
     )

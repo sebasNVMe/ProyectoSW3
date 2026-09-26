@@ -1,9 +1,9 @@
 import api from "../config/axios"
-import type { LoginForm, RegisterForm } from "../types"
+import type { LoginForm, RegisterForm, LoginResponse } from "../types"
 
-export async function loginUser(formData: LoginForm): Promise<string> {
+export async function loginUser(formData: LoginForm): Promise<LoginResponse> {
     const { data } = await api.post('/auth/login', formData)
-    return data.token
+    return data
 }
 
 export async function registerUser(formData: RegisterForm): Promise<string> {
