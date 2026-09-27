@@ -89,12 +89,16 @@ export default function RegisterView() {
                             <label htmlFor="cedUser" className="text-[13px] font-bold text-slate-700">Cédula</label>
                             <input
                                 id="cedUser"
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
                                 placeholder="12345678"
-                                className="w-full bg-white border border-slate-300 p-2.5 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="w-full bg-white border border-slate-300 p-2.5 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                                onInput={(e) => {
+                                    const target = e.target as HTMLInputElement;
+                                    target.value = target.value.replace(/\D/g, '');
+                                }}
                                 {...register('cedUser', {
                                     required: "La cédula es obligatoria",
-                                    valueAsNumber: true,
                                 })}
                             />
                             {errors.cedUser && <ErrorMessage>{errors.cedUser.message}</ErrorMessage>}

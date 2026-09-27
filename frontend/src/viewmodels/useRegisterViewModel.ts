@@ -8,7 +8,7 @@ export function useRegisterViewModel() {
     const initialValues: RegisterForm = {
         nameUser: '',
         lastNameUser: '',
-        cedUser: 0,
+        cedUser: '' as unknown as number,
         passwordUser: '',
         phoneUser: '',
         genderUser: '',

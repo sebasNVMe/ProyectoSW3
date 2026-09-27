@@ -9,7 +9,7 @@ export function useRegisterProfessionalViewModel() {
     const initialValues: RegisterProffesionalForm = {
         user: {
             codUser: 0,
-            cedUser: 0,
+            cedUser: '' as unknown as number,
             nameUser: '',
             lastNameUser: '',
             statusUser: '',

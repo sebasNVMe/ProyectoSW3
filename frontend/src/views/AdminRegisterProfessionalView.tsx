@@ -55,10 +55,15 @@ export default function AdminRegisterProfessionalView() {
                                 <label htmlFor="cedUser" className="text-[13px] font-bold text-slate-700">Cédula</label>
                                 <input
                                     id="cedUser"
-                                    type="number"
+                                    type="text"
+                                    inputMode="numeric"
                                     placeholder="12345678"
-                                    className="w-full bg-white border border-gray-200 p-2.5 rounded-lg text-sm placeholder-slate-500 text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    {...register('user.cedUser', { required: "La cédula es obligatoria", valueAsNumber: true })}
+                                    className="w-full bg-white border border-gray-200 p-2.5 rounded-lg text-sm placeholder-slate-500 text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                                    onInput={(e) => {
+                                        const target = e.target as HTMLInputElement;
+                                        target.value = target.value.replace(/\D/g, '');
+                                    }}
+                                    {...register('user.cedUser', { required: "La cédula es obligatoria" })}
                                 />
                                 {errors.user?.cedUser && <ErrorMessage>{errors.user.cedUser.message}</ErrorMessage>}
                             </div>

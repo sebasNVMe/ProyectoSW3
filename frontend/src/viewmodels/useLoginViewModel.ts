@@ -8,7 +8,7 @@ import { loginUser } from "../models/auth.model"
 
 export function useLoginViewModel() {
     const initialValues: LoginForm = {
-        cedUser: 0,
+        cedUser: '' as unknown as number,
         password: ''
     }
 

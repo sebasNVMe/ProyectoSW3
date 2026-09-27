@@ -21,9 +21,14 @@ export default function LoginView() {
                     <label htmlFor="cedUser" className="text-lg font-medium text-slate-800">Número de cedula</label>
                     <input
                         id="cedUser"
-                        type="number"
+                        type="text"
+                        inputMode="numeric"
                         placeholder="Ej: 12345678"
-                        className="border-solid border p-3 rounded-xl placeholder-slate-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                        className="border-solid border p-3 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                        onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.value = target.value.replace(/\D/g, '');
+                        }}
                         {...register("cedUser", {
                             required: "El número de cedula es obligatorio",
                         })}
