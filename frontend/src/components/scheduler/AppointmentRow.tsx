@@ -1,76 +1,93 @@
+import { StatusAppointment } from "../../types";
+
 type AppointmentRowProps = {
-    hora: string;
-    paciente: string;
-    cedula: string;
-    medico: string;
-    especialidad: string;
-    estado: "Pendiente" | "Confirmado" | "Cancelado";
-};
-
-const estadoConfig = {
-    Pendiente: {
-        dotColor: "bg-orange-400",
-        textColor: "text-orange-500",
-    },
-    Confirmado: {
-        dotColor: "bg-green-400",
-        textColor: "text-green-600",
-    },
-    Cancelado: {
-        dotColor: "bg-red-400",
-        textColor: "text-red-500",
-    },
-};
-
-const especialidadColors: Record<string, string> = {
-    Cardiología: "bg-indigo-50 text-indigo-600 ring-indigo-200",
-    Pediatría: "bg-pink-50 text-pink-600 ring-pink-200",
-    Dermatología: "bg-amber-50 text-amber-600 ring-amber-200",
-    Neurología: "bg-cyan-50 text-cyan-600 ring-cyan-200",
-    Traumatología: "bg-emerald-50 text-emerald-600 ring-emerald-200",
+    codApp: number;
+    formattedTime: string;
+    patientName: string;
+    patientCed: string;
+    profName: string;
+    specialityLabel: string;
+    specialityStyle: string;
+    statusLabel: string;
+    statusDotColor: string;
+    statusTextColor: string;
+    isActive: boolean;
+    onChangeStatus: (id: number, status: StatusAppointment) => void;
+    onCancel: (id: number) => void;
+    isChangingStatus: boolean;
+    isCancelling: boolean;
 };
 
 export default function AppointmentRow({
-    hora,
-    paciente,
-    cedula,
-    medico,
-    especialidad,
-    estado,
+    codApp,
+    formattedTime,
+    patientName,
+    patientCed,
+    profName,
+    specialityLabel,
+    specialityStyle,
+    statusLabel,
+    statusDotColor,
+    statusTextColor,
+    isActive,
+    onChangeStatus,
+    onCancel,
+    isChangingStatus,
+    isCancelling,
 }: AppointmentRowProps) {
-    const { dotColor, textColor } = estadoConfig[estado];
-    const especialidadStyle =
-        especialidadColors[especialidad] ||
-        "bg-slate-50 text-slate-600 ring-slate-200";
-
     return (
         <tr className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
             <td className="py-4 px-4 text-sm font-medium text-slate-700">
-                {hora}
+                {formattedTime}
             </td>
             <td className="py-4 px-4 text-sm font-medium text-slate-800">
-                {paciente}
+                {patientName}
             </td>
             <td className="py-4 px-4 text-sm text-slate-600 font-mono">
-                {cedula}
+                {patientCed}
             </td>
-            <td className="py-4 px-4 text-sm text-slate-700">{medico}</td>
+            <td className="py-4 px-4 text-sm text-slate-700">{profName}</td>
             <td className="py-4 px-4">
                 <span
-                    className={`inline-block text-xs font-medium px-3 py-1 rounded-full ring-1 ${especialidadStyle}`}
+                    className={`inline-block text-xs font-medium px-3 py-1 rounded-full ring-1 ${specialityStyle}`}
                 >
-                    {especialidad}
+                    {specialityLabel}
                 </span>
             </td>
             <td className="py-4 px-4">
                 <div className="flex items-center gap-2">
                     <span
-                        className={`w-2 h-2 rounded-full ${dotColor}`}
+                        className={`w-2 h-2 rounded-full ${statusDotColor}`}
                     ></span>
-                    <span className={`text-sm font-medium ${textColor}`}>
-                        {estado}
+                    <span className={`text-sm font-medium ${statusTextColor}`}>
+                        {statusLabel}
                     </span>
                 </div>
+            </td>
+            <td className="py-4 px-4">
+                {isActive && (
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() =>
+                                onChangeStatus(
+                                    codApp,
+                                    StatusAppointment.COMPLETED
+                                )
+                            }
+                            disabled={isChangingStatus}
+                            className="text-xs font-medium px-3 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 ring-1 ring-green-200 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                            Completar
+                        </button>
+                        <button
+                            onClick={() => onCancel(codApp)}
+                            disabled={isCancelling}
+                            className="text-xs font-medium px-3 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 ring-1 ring-red-200 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                )}
             </td>
         </tr>
     );

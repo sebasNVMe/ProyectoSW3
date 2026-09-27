@@ -172,7 +172,7 @@ export function useAppointmentViewModel() {
     // Confirma y envía la cita al backend:
     // 1. Obtiene o crea al usuario como paciente
     // 2. Usa el codPatient resultante para crear la cita
-    async function handleConfirm() {
+    async function handleConfirm(onSuccessCallback?: () => void) {
         if (!selectedProfessional || !selectedDateStr || !selectedSlot || !authUser) {
             toast.error('Faltan datos para confirmar la cita. Por favor, inicia sesión nuevamente.')
             return
@@ -187,7 +187,7 @@ export function useAppointmentViewModel() {
                 codPatient = patient.codPatient
             } catch (registerError) {
                 if (isAxiosError(registerError) && registerError.response?.status === 409) {
-                    // Ya es paciente — buscar por cédula
+                    // Ya es paciente, buscar por cédula
                     const existing = await getPatientByCedula(authUser.cedUser)
                     if (!existing) {
                         toast.error('No se pudo obtener el registro de paciente. Intenta nuevamente.')
@@ -199,12 +199,18 @@ export function useAppointmentViewModel() {
                 }
             }
 
-            // Agendar la cita con el codPatient resuelto
+            // Agendar la cita con el codPatient obtenido
             confirmAppointment({
                 codProf: selectedProfessional.codProf,
                 codPatient,
                 dateApp: selectedDateStr,
                 timeApp: selectedSlot.timeApp,
+            }, {
+                onSuccess: () => {
+                    if (onSuccessCallback) {
+                        onSuccessCallback()
+                    }
+                }
             })
         } catch (error) {
             if (isAxiosError(error) && error.response) {

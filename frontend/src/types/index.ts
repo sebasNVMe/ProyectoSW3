@@ -81,6 +81,15 @@ export type CreateAppointmentPayload = {
     descApp?: string
 }
 
+export const StatusAppointment = {
+    SCHEDULED: 'SCHEDULED',
+    COMPLETED: 'COMPLETED',
+    CANCELLED: 'CANCELLED',
+    RESCHEDULED: 'RESCHEDULED',
+} as const
+
+export type StatusAppointment = (typeof StatusAppointment)[keyof typeof StatusAppointment]
+
 export type Appointment = {
     codApp: number
     professional: Professional
@@ -88,5 +97,18 @@ export type Appointment = {
     dateApp: string
     timeApp: string
     descApp?: string
-    statusApp: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED'
+    statusApp: StatusAppointment
 }
+
+export type AppointmentRow = {
+    formattedTime: string;
+    patientName: string;
+    patientCed: string;
+    profName: string;
+    specialityLabel: string;
+    specialityStyle: string;
+    statusLabel: string;
+    statusDotColor: string;
+    statusTextColor: string;
+    isActive: boolean;
+};

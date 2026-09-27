@@ -12,13 +12,23 @@ export class PatientService {
   constructor(
     @InjectRepository(Patient) private readonly patients: Repository<Patient>,
     @InjectRepository(User) private readonly users: Repository<User>,
-  ) {}
+  ) { }
 
   async register(dto: CreatePatientDto): Promise<Patient> {
     const user = await this.users.findOneBy({ cedUser: dto.cedUser })
     if (!user) {
       throw new ConflictException('No existe ningun usuario con esa identificación');
     }
+
+
+    const existingPatient = await this.patients.findOne({
+      where: { user: { codUser: user.codUser } },
+      relations: { user: true },
+    });
+    if (existingPatient) {
+      return existingPatient;
+    }
+
     user.roleUser = RoleUserEnum.PATIENT;
     user.statusUser = StatusUserEnum.ACTIVE;
     const patient = await this.patients.save(this.patients.create({

@@ -62,12 +62,12 @@ export default function ScheduleAppointmentView() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Columna izquierda — Sidebar */}
+                {/* Columna izquierda */}
                 <div className="lg:col-span-4 space-y-6">
                     <NextAppointment />
                 </div>
 
-                {/* Columna derecha — Contenido secuencial */}
+                {/* Columna derecha */}
                 <div className="lg:col-span-8 space-y-6">
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-8">
                         {/* Título */}
@@ -82,27 +82,24 @@ export default function ScheduleAppointmentView() {
                                 {STEPS.map((step, stepIdx) => (
                                     <li key={step.name} className={`relative flex items-center ${stepIdx !== STEPS.length - 1 ? 'w-full' : ''}`}>
                                         <div className="relative flex flex-col items-center justify-center">
-                                            <div className={`z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 ${
-                                                step.id < currentStep ? 'bg-custom-blue text-white shadow-sm' :
-                                                step.id === currentStep ? 'border-2 border-custom-blue bg-white text-custom-blue shadow-sm' :
-                                                'border-2 border-gray-200 bg-gray-50 text-gray-400'
-                                            }`}>
+                                            <div className={`z-10 flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 ${step.id < currentStep ? 'bg-custom-blue text-white shadow-sm' :
+                                                    step.id === currentStep ? 'border-2 border-custom-blue bg-white text-custom-blue shadow-sm' :
+                                                        'border-2 border-gray-200 bg-gray-50 text-gray-400'
+                                                }`}>
                                                 {step.id < currentStep ? (
                                                     <CheckIcon className="w-6 h-6" aria-hidden="true" />
                                                 ) : (
                                                     <span className="text-sm font-semibold">{step.id}</span>
                                                 )}
                                             </div>
-                                            <div className={`absolute top-12 left-1/2 -translate-x-1/2 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
-                                                step.id <= currentStep ? 'text-gray-900' : 'text-gray-400'
-                                            }`}>
+                                            <div className={`absolute top-12 left-1/2 -translate-x-1/2 text-xs sm:text-sm font-medium whitespace-nowrap transition-colors duration-200 ${step.id <= currentStep ? 'text-gray-900' : 'text-gray-400'
+                                                }`}>
                                                 {step.name}
                                             </div>
                                         </div>
                                         {stepIdx !== STEPS.length - 1 && (
-                                            <div className={`flex-auto h-1 mx-2 sm:mx-4 rounded-full transition-colors duration-200 ${
-                                                step.id < currentStep ? 'bg-custom-blue' : 'bg-gray-100'
-                                            }`} />
+                                            <div className={`flex-auto h-1 mx-2 sm:mx-4 rounded-full transition-colors duration-200 ${step.id < currentStep ? 'bg-custom-blue' : 'bg-gray-100'
+                                                }`} />
                                         )}
                                     </li>
                                 ))}
@@ -159,7 +156,7 @@ export default function ScheduleAppointmentView() {
                                         selectedDateStr={selectedDateStr}
                                         selectedSlot={selectedSlot}
                                         isConfirming={isConfirming}
-                                        onConfirm={handleConfirm}
+                                        onConfirm={() => handleConfirm(() => setCurrentStep(1))}
                                         onModify={() => setCurrentStep(1)}
                                     />
                                 </div>
@@ -173,11 +170,10 @@ export default function ScheduleAppointmentView() {
                                     type="button"
                                     onClick={handleBack}
                                     disabled={currentStep === 1}
-                                    className={`px-5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${
-                                        currentStep === 1
+                                    className={`px-5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${currentStep === 1
                                             ? 'text-gray-400 bg-gray-50 cursor-not-allowed opacity-50'
                                             : 'text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 shadow-sm active:scale-95'
-                                    }`}
+                                        }`}
                                 >
                                     Atrás
                                 </button>
@@ -185,11 +181,10 @@ export default function ScheduleAppointmentView() {
                                     type="button"
                                     onClick={handleNext}
                                     disabled={!canGoNext()}
-                                    className={`px-6 py-2.5 text-sm font-semibold text-white rounded-xl transition-all duration-200 flex items-center gap-2 ${
-                                        canGoNext()
+                                    className={`px-6 py-2.5 text-sm font-semibold text-white rounded-xl transition-all duration-200 flex items-center gap-2 ${canGoNext()
                                             ? 'bg-custom-blue hover:bg-custom-indigo shadow-md shadow-indigo-200 hover:shadow-lg hover:shadow-indigo-300 cursor-pointer active:scale-95'
                                             : 'bg-custom-blue/50 cursor-not-allowed opacity-60'
-                                    }`}
+                                        }`}
                                 >
                                     Siguiente
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

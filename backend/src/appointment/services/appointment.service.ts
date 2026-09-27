@@ -86,7 +86,7 @@ export class AppointmentService {
 
   async findAll(): Promise<Appointment[]> {
     return this.appointmentRepository.find({
-      relations: { patient: true, professional: true },
+      relations: { patient: { user: true }, professional: { user: true } },
     });
   }
 
