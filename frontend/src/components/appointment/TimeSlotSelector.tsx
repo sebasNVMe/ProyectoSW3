@@ -1,6 +1,7 @@
 import { ClockIcon } from '@heroicons/react/24/outline'
 import Calendar from '../Calendar'
 import type { AppointmentSlot, Professional } from '../../types'
+import { formatTime } from '../../utils/dateFormatters'
 
 type Props = {
     selectedProfessional: Professional | null
@@ -12,14 +13,6 @@ type Props = {
     isErrorSlots: boolean
     selectedSlot: AppointmentSlot | null
     onSelectSlot: (slot: AppointmentSlot) => void
-}
-
-/** Convierte "HH:mm:ss" a "HH:mm AM/PM" */
-function formatTime(time: string): string {
-    const [h, m] = time.split(':').map(Number)
-    const suffix = h >= 12 ? 'PM' : 'AM'
-    const hour12 = h % 12 || 12
-    return `${String(hour12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${suffix}`
 }
 
 export default function TimeSlotSelector({

@@ -36,6 +36,8 @@ export default function ScheduleAppointmentView() {
         isConfirming,
         selectedSpecialtyLabel,
         selectedDateStr,
+        formattedDate,
+        formattedTime,
     } = useAppointmentViewModel()
 
     const [currentStep, setCurrentStep] = useState(1)
@@ -153,8 +155,8 @@ export default function ScheduleAppointmentView() {
                                     <AppointmentSummary
                                         specialtyLabel={selectedSpecialtyLabel}
                                         selectedProfessional={selectedProfessional}
-                                        selectedDateStr={selectedDateStr}
-                                        selectedSlot={selectedSlot}
+                                        formattedDate={formattedDate}
+                                        formattedTime={formattedTime}
                                         isConfirming={isConfirming}
                                         onConfirm={() => handleConfirm(() => setCurrentStep(1))}
                                         onModify={() => setCurrentStep(1)}

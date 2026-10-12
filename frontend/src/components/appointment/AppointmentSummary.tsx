@@ -6,46 +6,23 @@ import {
     ArrowLeftIcon,
     CheckIcon,
 } from '@heroicons/react/24/outline'
-import type { Professional, AppointmentSlot } from '../../types'
+import type { Professional } from '../../types'
 
 type Props = {
     specialtyLabel: string
     selectedProfessional: Professional
-    selectedDateStr: string   // YYYY-MM-DD
-    selectedSlot: AppointmentSlot
+    formattedDate: string
+    formattedTime: string
     isConfirming: boolean
     onConfirm: () => void
     onModify: () => void
 }
 
-/** Formatea "YYYY-MM-DD" como "Lunes, 15 de noviembre de 2026" */
-function formatDate(dateStr: string): string {
-    // Parsear como fecha local (sin desfase UTC)
-    const [year, month, day] = dateStr.split('-').map(Number)
-    const date = new Date(year, month - 1, day)
-    return date.toLocaleDateString('es-CO', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    })
-}
-
-/** Formatea "HH:mm:ss" o "HH:mm" como "08:00 AM" */
-function formatTime(timeStr: string): string {
-    const [hStr, mStr] = timeStr.split(':')
-    const h = parseInt(hStr, 10)
-    const m = mStr
-    const period = h < 12 ? 'AM' : 'PM'
-    const h12 = h % 12 === 0 ? 12 : h % 12
-    return `${String(h12).padStart(2, '0')}:${m} ${period}`
-}
-
 export default function AppointmentSummary({
     specialtyLabel,
     selectedProfessional,
-    selectedDateStr,
-    selectedSlot,
+    formattedDate,
+    formattedTime,
     isConfirming,
     onConfirm,
     onModify,
@@ -89,7 +66,7 @@ export default function AppointmentSummary({
                     <div className="flex-1 min-w-0">
                         <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Fecha</p>
                         <p className="text-sm font-semibold text-gray-900 capitalize truncate">
-                            {formatDate(selectedDateStr)}
+                            {formattedDate}
                         </p>
                     </div>
                 </div>
@@ -100,7 +77,7 @@ export default function AppointmentSummary({
                     <div className="flex-1 min-w-0">
                         <p className="text-xs text-gray-400 uppercase tracking-wider font-medium">Hora</p>
                         <p className="text-sm font-semibold text-gray-900 capitalize truncate">
-                            {formatTime(selectedSlot.timeApp)}
+                            {formattedTime}
                         </p>
                     </div>
                 </div>

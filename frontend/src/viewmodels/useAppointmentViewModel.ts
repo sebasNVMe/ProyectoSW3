@@ -6,6 +6,7 @@ import { getProfessionalsBySpeciality } from "../models/professional.model"
 import { getAvailableSlots, createAppointment } from "../models/appointment.model"
 import { registerPatient, getPatientByCedula } from "../models/patient.model"
 import { SpecialityProfEnum, type Professional, type Specialty, type AppointmentSlot } from "../types"
+import { formatDate, formatTime } from "../utils/dateFormatters"
 
 // Metadatos de las especialidades 
 export const SPECIALTIES: Specialty[] = [
@@ -237,6 +238,10 @@ export function useAppointmentViewModel() {
     // Label de la especialidad seleccionada
     const selectedSpecialtyLabel = SPECIALTIES.find(s => s.value === selectedSpeciality)?.label ?? ''
 
+    // Fecha y hora formateadas para presentación
+    const formattedDate = selectedDateStr ? formatDate(selectedDateStr) : ''
+    const formattedTime = selectedSlot ? formatTime(selectedSlot.timeApp) : ''
+
     return {
         // Especialidades
         specialties: SPECIALTIES,
@@ -269,5 +274,7 @@ export function useAppointmentViewModel() {
         isReadyToConfirm,
         selectedSpecialtyLabel,
         selectedDateStr,
+        formattedDate,
+        formattedTime,
     }
 }
