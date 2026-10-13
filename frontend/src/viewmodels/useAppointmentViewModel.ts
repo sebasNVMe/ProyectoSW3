@@ -3,9 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAxiosError } from "axios"
 import { toast } from "sonner"
 import { getProfessionalsBySpeciality } from "../models/professional.model"
-import { getAvailableSlots, createAppointment } from "../models/appointment.model"
+import { getAvailableSlots, createAppointment, getAppointmentsByPatient } from "../models/appointment.model"
 import { registerPatient, getPatientByCedula } from "../models/patient.model"
-import { SpecialityProfEnum, type Professional, type Specialty, type AppointmentSlot } from "../types"
+import { SpecialityProfEnum, type Professional, type Specialty, type AppointmentSlot, type Appointment } from "../types"
 import { formatDate, formatTime } from "../utils/dateFormatters"
 
 // Metadatos de las especialidades 
@@ -55,6 +55,23 @@ export function useAppointmentViewModel() {
 
     // Obtener codUser del usuario autenticado (localStorage > React Query cache)
     const authUser = getAuthUser() ?? queryClient.getQueryData<{ codUser: number; cedUser: number; nameUser: string; role: string }>(['user'])
+
+    // Verificación de cita activa 
+    const { data: existingPatient } = useQuery({
+        queryKey: ['patient', authUser?.cedUser],
+        queryFn: () => getPatientByCedula(authUser!.cedUser),
+        enabled: !!authUser?.cedUser,
+    })
+
+    const { data: patientAppointments = [], isLoading: isLoadingActiveCheck } = useQuery<Appointment[]>({
+        queryKey: ['appointments', 'patient', existingPatient?.codPatient],
+        queryFn: () => getAppointmentsByPatient(existingPatient!.codPatient),
+        enabled: !!existingPatient?.codPatient,
+    })
+
+    // Si existe una cita SCHEDULED, el paciente no puede agendar otra
+    const activeAppointment = patientAppointments.find(app => app.statusApp === 'SCHEDULED') ?? null
+    const hasActiveAppointment = !!activeAppointment
 
     // Paso 1: Selección de la especialidad
     const [selectedSpeciality, setSelectedSpeciality] = useState<SpecialityProfEnum | null>(null)
@@ -243,6 +260,11 @@ export function useAppointmentViewModel() {
     const formattedTime = selectedSlot ? formatTime(selectedSlot.timeApp) : ''
 
     return {
+        // Verificación de cita activa
+        hasActiveAppointment,
+        activeAppointment,
+        isLoadingActiveCheck,
+
         // Especialidades
         specialties: SPECIALTIES,
         selectedSpeciality,
