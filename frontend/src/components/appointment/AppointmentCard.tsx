@@ -2,18 +2,30 @@ import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
 
 interface AppointmentCardProps {
     doctorName: string;
-    specialty: string;
+    specialityLabel: string;
+    specialityStyle: string;
     date: string;
     time: string;
-    status: 'agendada' | 'cancelada';
+    statusLabel: string;
+    statusTextColor: string;
+    statusBgColor: string;
+    isActive: boolean;
+    onCancel?: () => void;
+    isCancelling?: boolean;
 }
 
 export default function AppointmentCard({
     doctorName,
-    specialty,
+    specialityLabel,
+    specialityStyle,
     date,
     time,
-    status,
+    statusLabel,
+    statusTextColor,
+    statusBgColor,
+    isActive,
+    onCancel,
+    isCancelling,
 }: AppointmentCardProps) {
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
@@ -22,8 +34,10 @@ export default function AppointmentCard({
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <h3 className="text-xl font-bold text-gray-900">{doctorName}</h3>
-                            <span className="px-3 py-1 bg-indigo-50 text-custom-blue text-xs font-bold rounded-full uppercase tracking-wider">
-                                {specialty}
+                            <span
+                                className={`inline-block text-xs font-medium px-3 py-1 rounded-full ring-1 ${specialityStyle}`}
+                            >
+                                {specialityLabel}
                             </span>
                         </div>
 
@@ -39,35 +53,27 @@ export default function AppointmentCard({
                         </div>
 
                         <div>
-                            {status === 'agendada' ? (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                                    Confirmada
-                                </span>
-                            ) : (
-                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                                    Cancelada
-                                </span>
-                            )}
+                            <span
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${statusBgColor} ${statusTextColor}`}
+                            >
+                                {statusLabel}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-3 w-full sm:w-auto mt-4 sm:mt-0">
-                    {status === 'agendada' ? (
-                        <button className="bg-gradient-to-r from-custom-blue to-custom-indigo text-white font-medium py-2.5 px-6 rounded-xl hover:opacity-90 transition-opacity shadow-md shadow-indigo-200">
-                            Reprogramar
+                {isActive && (
+                    <div className="flex flex-col gap-3 w-full sm:w-auto mt-4 sm:mt-0">
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            disabled={isCancelling}
+                            className="bg-red-500 text-white font-medium py-2.5 px-6 rounded-xl hover:bg-red-600 shadow-sm hover:shadow-md hover:shadow-red-500/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                            {isCancelling ? "Cancelando…" : "Cancelar Cita"}
                         </button>
-                    ) : (
-                        <button className="bg-gradient-to-r from-custom-blue to-custom-indigo text-white font-medium py-2.5 px-6 rounded-xl hover:opacity-90 transition-opacity shadow-md shadow-indigo-200">
-                            Pagar Ahora
-                        </button>
-                    )}
-                    <button className="text-red-500 font-medium py-2.5 px-6 rounded-xl hover:bg-red-50 transition-colors">
-                        Cancelar Cita
-                    </button>
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );
