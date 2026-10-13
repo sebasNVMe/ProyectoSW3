@@ -7,7 +7,6 @@ import ScheduleAppointmentView from "./views/ScheduleAppointmentView";
 import MyAppointmentsView from "./views/MyAppointmentsView";
 import UserLayout from "./layout/UserLayout";
 import SchedulerView from "./views/SchedulerView";
-import SchedulerLayout from "./layout/SchedulerLayout";
 import AdminLayout from "./layout/AdminLayout";
 import AdminConfigView from "./views/AdminConfigView";
 import AdminRegisterProfessionalView from "./views/AdminRegisterProfessionalView";
@@ -24,7 +23,7 @@ export default function Router() {
                     <Route path='/my-appointments' element={<MyAppointmentsView />} />
                     <Route path='/schedule-appointment' element={<ScheduleAppointmentView />} />
                 </Route>
-                <Route element={<SchedulerLayout />}>
+                <Route element={<UserLayout />}>
                     <Route path='/scheduler' element={<SchedulerView />} />
                 </Route>
                 <Route element={<AdminLayout />}>
