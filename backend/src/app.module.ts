@@ -14,7 +14,6 @@ import { AppointmentModule } from './appointment/appointment.module.js';
       isGlobal: true,
     }),
 
-
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,6 +27,7 @@ import { AppointmentModule } from './appointment/appointment.module.js';
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
+        //dropSchema: true,
       }),
     }),
 

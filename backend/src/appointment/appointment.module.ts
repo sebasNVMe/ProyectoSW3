@@ -5,9 +5,10 @@ import { AppointmentService } from './services/appointment.service.js';
 import { FestivosService } from './services/festivos.service.js';
 import { AppointmentController } from './controllers/appointment.controller.js';
 import { PeopleModule } from '../people/people.module.js';
+import { AuthModule } from '../auth/auth.module.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Appointment]), PeopleModule],
+  imports: [TypeOrmModule.forFeature([Appointment]), PeopleModule, AuthModule],
   providers: [AppointmentService, FestivosService],
   controllers: [AppointmentController],
   exports: [TypeOrmModule],

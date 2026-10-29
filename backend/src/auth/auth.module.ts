@@ -1,30 +1,22 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserService } from './services/user.service.js';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserController } from './controllers/user.controller.js';
 import { User } from './entities/user.entity.js';
+import { UserService } from './services/user.service.js';
+import { KeycloakService } from './services/keycloak.service.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { OptionalJwtAuthGuard } from './guards/optional-jwt-auth.guard.js';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     ConfigModule,
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: parseInt(configService.get<string>('JWT_EXPIRATION')!, 10),
-        },
-      }),
-    }),
   ],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService, JwtStrategy, KeycloakService, OptionalJwtAuthGuard],
   controllers: [UserController],
-  exports: [TypeOrmModule, UserService],
+  exports: [TypeOrmModule, UserService, PassportModule, OptionalJwtAuthGuard],
 })
 export class AuthModule {}

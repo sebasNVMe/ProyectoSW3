@@ -5,6 +5,7 @@ import { toast } from "sonner"
 import { isAxiosError } from "axios"
 import type { LoginForm } from "../types"
 import { loginUser } from "../models/auth.model"
+import { ROLE_HOME, type Role } from "../config/roles"
 
 export function useLoginViewModel() {
     const initialValues: LoginForm = {
@@ -34,7 +35,8 @@ export function useLoginViewModel() {
                 cedUser: loginResponse.cedUser,
                 nameUser: loginResponse.nameUser
             })
-            navigate('/schedule-appointment')
+            //navigate('/schedule-appointment')
+            navigate(ROLE_HOME[loginResponse.role as Role], { replace: true })
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.message)

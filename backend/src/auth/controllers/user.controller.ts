@@ -15,6 +15,13 @@ import { LoginRequestDto } from '../dto/loginRequest.dto.js';
 import { UpdateUserDto } from '../dto/updateUser.dto.js';
 import { RoleUserEnum } from '../enums/roleUser.enum.js';
 
+import { UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import type { AuthenticatedUser } from '../strategies/jwt.strategy.js'
+import { OptionalJwtAuthGuard } from '../guards/optional-jwt-auth.guard.js';
+import { CurrentUser } from '../decorators/current-user.decorator.js';
+import { Auth } from '../decorators/auth.decorator.js';
+
 @Controller('auth')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -25,10 +32,21 @@ export class UserController {
   }
 
   @Post('register')
-  register(@Body() dto: RegisterUserDto) {
-    return this.userService.register(dto);
+  //@UseGuards(OptionalJwtAuthGuard)
+  register(
+    @Body() dto: RegisterUserDto,
+    @CurrentUser() actor: AuthenticatedUser | null,
+  ) {
+    return this.userService.register(dto, actor);
   }
 
+  @Auth()
+  @Get('me')
+  me(@CurrentUser() actor: AuthenticatedUser) {
+    return actor;
+  }
+
+  @Auth(RoleUserEnum.ADMIN, RoleUserEnum.SCHEDULER)
   @Get('users')
   findByRole(@Query('role') role: RoleUserEnum) {
     return this.userService.findByRole(role);
@@ -44,11 +62,17 @@ export class UserController {
     return this.userService.findByCodigoUser(codigo);
   }
 
+  @Auth()
   @Put('users/:id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserDto) {
-    return this.userService.update(id, dto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateUserDto,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.userService.update(id, dto, actor);
   }
 
+  @Auth(RoleUserEnum.ADMIN)
   @Delete('users/:id')
   deactivate(@Param('id', ParseIntPipe) id: number) {
     return this.userService.deactivate(id);

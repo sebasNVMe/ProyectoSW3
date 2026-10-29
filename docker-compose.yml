@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: piedrazul-postgres
+    environment:
+      POSTGRES_USER: piedrazul
+      POSTGRES_PASSWORD: piedrazul_dev
+      POSTGRES_DB: piedraazul_db
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.6.2
+    container_name: piedrazul-keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./docker/keycloak/import:/opt/keycloak/data/import:ro
+
+volumes:
+  postgres_data:
+  keycloak_data:

@@ -1,4 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ROLES } from "./config/roles";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import HomeView from "./views/HomeView";
 import AuthLayout from "./layout/AuthLayout";
 import LoginView from "./views/LoginView";
@@ -15,22 +18,35 @@ export default function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<AuthLayout />}>
-                    <Route path='/auth/login' element={<LoginView />} />
-                    <Route path='/auth/register' element={<RegisterView />} />
+                <Route element={<PublicOnlyRoute />}>
+                    <Route element={<AuthLayout />}>
+                        <Route path='/auth/login' element={<LoginView />} />
+                        <Route path='/auth/register' element={<RegisterView />} />
+                    </Route>
                 </Route>
-                <Route element={<UserLayout />}>
-                    <Route path='/my-appointments' element={<MyAppointmentsView />} />
-                    <Route path='/schedule-appointment' element={<ScheduleAppointmentView />} />
+
+                <Route element={<ProtectedRoute allowedRoles={[ROLES.PATIENT]} />}>
+                    <Route element={<UserLayout />}>
+                        <Route path='/my-appointments' element={<MyAppointmentsView />} />
+                        <Route path='/schedule-appointment' element={<ScheduleAppointmentView />} />
+                    </Route>
                 </Route>
-                <Route element={<UserLayout />}>
-                    <Route path='/scheduler' element={<SchedulerView />} />
+
+                <Route element={<ProtectedRoute allowedRoles={[ROLES.SCHEDULER, ROLES.PROFESSIONAL]} />}>
+                    <Route element={<UserLayout />}>
+                        <Route path='/scheduler' element={<SchedulerView />} />
+                    </Route>
                 </Route>
-                <Route element={<AdminLayout />}>
-                    <Route path='/admin/config' element={<AdminConfigView />} />
-                    <Route path='/admin/register-professional' element={<AdminRegisterProfessionalView />} />
+
+                <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
+                    <Route element={<AdminLayout />}>
+                        <Route path='/admin/config' element={<AdminConfigView />} />
+                        <Route path='/admin/register-professional' element={<AdminRegisterProfessionalView />} />
+                    </Route>
                 </Route>
+
                 <Route path='/' element={<HomeView />} />
+                <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
         </BrowserRouter>
     )

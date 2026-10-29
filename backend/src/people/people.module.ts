@@ -7,9 +7,10 @@ import { Professional } from './entities/professional.entity.js';
 import { PatientService } from './services/patient.service.js';
 import { ProfessionalController } from './controllers/professional.controller.js';
 import { ProfessionalService } from './services/professional.service.js';
+import { AuthModule } from '../auth/auth.module.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Patient, Professional, User])],
+  imports: [TypeOrmModule.forFeature([Patient, Professional, User]), AuthModule],
   controllers: [PatientController, ProfessionalController],
   providers: [PatientService, ProfessionalService],
   exports: [PatientService, ProfessionalService],

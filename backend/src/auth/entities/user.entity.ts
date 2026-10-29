@@ -11,6 +11,9 @@ export class User {
   @PrimaryGeneratedColumn()
   codUser: number;
 
+  @Column({ type: 'uuid', unique: true, nullable: true })
+  keycloakId: string | null;
+
   @Column()
   cedUser: number;
 
@@ -29,9 +32,6 @@ export class User {
 
   @Column({ type: 'enum', enum: RoleUserEnum })
   roleUser: RoleUserEnum;
-
-  @Column()
-  passwordUser: string;
 
   @Column()
   phoneUser: string;
