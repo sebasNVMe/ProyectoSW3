@@ -133,6 +133,7 @@ export function useAppointmentViewModel() {
             toast.success('¡Cita agendada exitosamente!')
             // Invalidar queries relacionadas para refrescar datos
             queryClient.invalidateQueries({ queryKey: ['appointments'] })
+            queryClient.invalidateQueries({ queryKey: ['patient'] })
             // Limpiar todo el formulario
             resetAll()
         },
