@@ -49,6 +49,14 @@ export type LoginResponse = {
     nameUser: string;
 }
 
+/** Datos del usuario autenticado, obtenidos desde GET /auth/me */
+export type UserProfile = {
+    codUser: number;
+    cedUser: number;
+    nameUser: string;
+    role: string;
+}
+
 export const SpecialityProfEnum = {
     Neural_Therapy: 'Neural_Therapy',
     Chiropractor: 'Chiropractor',

@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { isAxiosError } from "axios"
 import type { LoginForm } from "../types"
-import { loginUser } from "../models/auth.model"
+import { loginUser, getMe } from "../models/auth.model"
 import { ROLE_HOME, type Role } from "../config/roles"
 
 export function useLoginViewModel() {
@@ -21,22 +21,15 @@ export function useLoginViewModel() {
         try {
             const parsedData = { ...formData, cedUser: Number(formData.cedUser) }
             const loginResponse = await loginUser(parsedData)
-            console.log(loginResponse)
+
+            // Solo guardar el token en localStorage
             localStorage.setItem('AUTH_TOKEN', loginResponse.token)
-            localStorage.setItem('AUTH_USER', JSON.stringify({
-                role: loginResponse.role,
-                codUser: loginResponse.codUser,
-                cedUser: loginResponse.cedUser,
-                nameUser: loginResponse.nameUser,
-            }))
-            queryClient.setQueryData(['user'], {
-                role: loginResponse.role,
-                codUser: loginResponse.codUser,
-                cedUser: loginResponse.cedUser,
-                nameUser: loginResponse.nameUser
-            })
-            //navigate('/schedule-appointment')
-            navigate(ROLE_HOME[loginResponse.role as Role], { replace: true })
+
+            // Obtener el perfil del usuario desde /auth/me y cachearlo en React Query
+            const userProfile = await getMe()
+            queryClient.setQueryData(['user'], userProfile)
+
+            navigate(ROLE_HOME[userProfile.role as Role], { replace: true })
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.message)

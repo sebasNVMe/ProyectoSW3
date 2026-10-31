@@ -1,17 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getPatientByCedula } from "../models/patient.model";
 import { getAppointmentsByPatient } from "../models/appointment.model";
 import { formatShortDate, formatTime } from "../utils/dateFormatters";
+import { useUser } from "../hooks/useUser";
 import type { Appointment } from "../types";
-
-// Se obtienen los datos del usuario autenticado
-function getAuthUser(): { codUser: number; cedUser: number; nameUser: string; role: string } | undefined {
-    try {
-        const raw = localStorage.getItem('AUTH_USER')
-        if (raw) return JSON.parse(raw)
-    } catch { }
-    return undefined
-}
 
 /** Construye un Date local a partir de "YYYY-MM-DD" y "HH:mm:ss" */
 function parseAppointmentDate(dateStr: string, timeStr: string): Date {
@@ -21,8 +13,7 @@ function parseAppointmentDate(dateStr: string, timeStr: string): Date {
 }
 
 export function useNextAppointmentViewModel() {
-    const queryClient = useQueryClient();
-    const authUser = getAuthUser() ?? queryClient.getQueryData<{ codUser: number; cedUser: number; nameUser: string; role: string }>(['user']);
+    const { user: authUser } = useUser();
 
     // 1. Obtener el paciente (si existe)
     const { data: patient } = useQuery({

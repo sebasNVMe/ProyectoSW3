@@ -7,6 +7,7 @@ import { getAvailableSlots, createAppointment, getAppointmentsByPatient } from "
 import { registerPatient, getPatientByCedula } from "../models/patient.model"
 import { SpecialityProfEnum, type Professional, type Specialty, type AppointmentSlot, type Appointment } from "../types"
 import { formatDate, formatTime } from "../utils/dateFormatters"
+import { useUser } from "../hooks/useUser"
 
 // Metadatos de las especialidades 
 export const SPECIALTIES: Specialty[] = [
@@ -39,22 +40,9 @@ function parseUnavailableDaysToJsDays(raw: string | null): number[] {
     return raw.split(",").map(n => (Number(n.trim()) + 1) % 7)
 }
 
-// Lee el usuario autenticado, primero desde localStorage, luego del cache de React Query 
-function getAuthUser(): { codUser: number; cedUser: number; nameUser: string; role: string } | undefined {
-    try {
-        const raw = localStorage.getItem('AUTH_USER')
-        if (raw) return JSON.parse(raw)
-    } catch {
-        // ignorar JSON inválido
-    }
-    return undefined
-}
-
 export function useAppointmentViewModel() {
     const queryClient = useQueryClient()
-
-    // Obtener codUser del usuario autenticado (localStorage > React Query cache)
-    const authUser = getAuthUser() ?? queryClient.getQueryData<{ codUser: number; cedUser: number; nameUser: string; role: string }>(['user'])
+    const { user: authUser } = useUser()
 
     // Verificación de cita activa 
     const { data: existingPatient } = useQuery({

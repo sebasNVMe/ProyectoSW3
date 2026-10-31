@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
-import { getSession } from "../utils/session";
+import { useUser } from "../hooks/useUser";
 
 export default function SchedulerNavigation() {
     const location = useLocation();
-    const name = getSession()?.user.nameUser ?? "Agendador";
+    const { user } = useUser();
+    const name = user?.nameUser ?? "Agendador";
 
     return (
         <div className="flex items-center gap-6">

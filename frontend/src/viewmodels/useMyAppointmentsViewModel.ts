@@ -6,6 +6,7 @@ import { getAppointmentsByPatient, cancelAppointment } from "../models/appointme
 import { StatusAppointment } from "../types";
 import type { Appointment } from "../types";
 import { formatDate, formatTime } from "../utils/dateFormatters";
+import { useUser } from "../hooks/useUser";
 
 
 
@@ -49,19 +50,6 @@ const specialityLabels: Record<string, string> = {
     General: "General",
 };
 
-
-
-function getAuthUser():
-    | { codUser: number; cedUser: number; nameUser: string; role: string }
-    | undefined {
-    try {
-        const raw = localStorage.getItem("AUTH_USER");
-        if (raw) return JSON.parse(raw);
-    } catch {
-    }
-    return undefined;
-}
-
 export type AppointmentCardData = {
     codApp: number;
     doctorName: string;
@@ -79,14 +67,7 @@ export type AppointmentCardData = {
 
 export function useMyAppointmentsViewModel() {
     const queryClient = useQueryClient();
-    const authUser =
-        getAuthUser() ??
-        queryClient.getQueryData<{
-            codUser: number;
-            cedUser: number;
-            nameUser: string;
-            role: string;
-        }>(["user"]);
+    const { user: authUser } = useUser();
 
     // 1. Obtener el paciente
     const { data: patient } = useQuery({

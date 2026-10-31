@@ -42,8 +42,17 @@ export class UserController {
 
   @Auth()
   @Get('me')
-  me(@CurrentUser() actor: AuthenticatedUser) {
-    return actor;
+  async me(@CurrentUser() actor: AuthenticatedUser) {
+    const user = await this.userService.findByCedula(actor.cedUser);
+    if (!user) {
+      return actor;
+    }
+    return {
+      codUser: user.codUser,
+      cedUser: user.cedUser,
+      nameUser: user.nameUser,
+      role: user.roleUser,
+    };
   }
 
   @Auth(RoleUserEnum.ADMIN, RoleUserEnum.SCHEDULER)

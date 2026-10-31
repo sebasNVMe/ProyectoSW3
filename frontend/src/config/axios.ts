@@ -1,32 +1,14 @@
-/*import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { clearSession, getToken } from "../utils/session";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
 
 api.interceptors.request.use((config) => {
-
-    const token = localStorage.getItem('AUTH_TOKEN')
+    const token = getToken()
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-})
-
-
-export default api*/
-
-import axios, { isAxiosError } from "axios";
-import { clearSession, getSession } from "../utils/session";
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
-})
-
-api.interceptors.request.use((config) => {
-    const session = getSession()
-    if (session) {
-        config.headers.Authorization = `Bearer ${session.token}`
     }
     return config
 })
