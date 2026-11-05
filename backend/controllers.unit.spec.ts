@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { AppointmentController } from './src/appointment/controllers/appointment.controller.js';
 import { PatientController } from './src/people/controllers/patient.controller.js';
 import { ProfessionalController } from './src/people/controllers/professional.controller.js';
@@ -110,19 +110,19 @@ describe('PatientController', () => {
   it('encuentra un paciente por id', async () => {
     const patient = { codPatient: 1 };
     service.findByIdPatient.mockResolvedValue(patient);
-    await expect(controller.findById(1)).resolves.toBe(patient);
+    await expect(controller.findById(1, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).resolves.toBe(patient);
     expect(service.findByIdPatient).toHaveBeenCalledWith(1);
   });
   it('lanza NotFoundException cuando no existe el id del paciente', async () => {
     service.findByIdPatient.mockResolvedValue(undefined);
-    await expect(controller.findById(404)).rejects.toBeInstanceOf(NotFoundException);
+    await expect(controller.findById(404, { cedUser: 404, roles: [RoleUserEnum.PATIENT] } as never)).rejects.toBeInstanceOf(NotFoundException);
   });
   it('registra un paciente y establece la cabecera de ubicación', async () => {
-    const dto = { firstName: 'Ana' };
+    const dto = { firstName: 'Ana', cedUser: 101 };
     const patient = { codPatient: 23 };
     const response = responseMock();
     service.register.mockResolvedValue(patient);
-    await expect(controller.register(dto as never, response as never)).resolves.toBe(patient);
+    await expect(controller.register(dto as never, { cedUser: 101, roles: [RoleUserEnum.PATIENT] } as never, response as never)).resolves.toBe(patient);
     expect(service.register).toHaveBeenCalledWith(dto);
     expect(response.location).toHaveBeenCalledWith('/patients/23');
   });
@@ -130,23 +130,46 @@ describe('PatientController', () => {
     const dto = { phone: '123' };
     const patient = { codPatient: 1 };
     service.update.mockResolvedValue(patient);
-    await expect(controller.update(1, dto as never)).resolves.toBe(patient);
+    await expect(controller.update(1, dto as never, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).resolves.toBe(patient);
     expect(service.update).toHaveBeenCalledWith(1, dto);
   });
   it('desactiva un paciente', async () => {
     service.deactivate.mockResolvedValue(undefined);
-    await expect(controller.delete(1)).resolves.toBeUndefined();
+    await expect(controller.delete(1, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).resolves.toBeUndefined();
     expect(service.deactivate).toHaveBeenCalledWith(1);
   });
   it('encuentra un paciente por código', async () => {
-    const patient = { codPatient: 1 };
+    const patient = { codPatient: 1, user: { cedUser: 1 } };
     service.findByCodPatient.mockResolvedValue(patient);
-    await expect(controller.findByCod(1)).resolves.toBe(patient);
+    await expect(controller.findByCod(1, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).resolves.toBe(patient);
     expect(service.findByCodPatient).toHaveBeenCalledWith(1);
   });
   it('lanza NotFoundException cuando no existe el código del paciente', async () => {
     service.findByCodPatient.mockResolvedValue(null);
-    await expect(controller.findByCod(404)).rejects.toBeInstanceOf(NotFoundException);
+    await expect(controller.findByCod(404, { cedUser: 404, roles: [RoleUserEnum.PATIENT] } as never)).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('rechaza que un paciente consulte el registro de otra persona', async () => {
+    await expect(controller.findById(2, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).rejects.toBeInstanceOf(ForbiddenException);
+    expect(service.findByIdPatient).not.toHaveBeenCalledWith(2);
+  });
+  it('permite al personal consultar cualquier paciente', async () => {
+    const patient = { codPatient: 2 };
+    service.findByIdPatient.mockResolvedValue(patient);
+    await expect(controller.findById(2, { cedUser: 1, roles: [RoleUserEnum.SCHEDULER] } as never)).resolves.toBe(patient);
+  });
+  it('rechaza que un paciente cree un registro para otra cédula', async () => {
+    const dto = { cedUser: 2 };
+    await expect(controller.register(dto as never, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never, responseMock() as never)).rejects.toBeInstanceOf(ForbiddenException);
+    expect(service.register).not.toHaveBeenCalledWith(dto);
+  });
+  it('rechaza que un paciente actualice el registro de otra persona', async () => {
+    await expect(controller.update(2, {} as never, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).rejects.toBeInstanceOf(ForbiddenException);
+    expect(service.update).not.toHaveBeenCalledWith(2, {});
+  });
+  it('impide que un paciente consulte por código el registro de otra persona', async () => {
+    service.findByCodPatient.mockResolvedValue({ codPatient: 8, user: { cedUser: 2 } });
+    await expect(controller.findByCod(8, { cedUser: 1, roles: [RoleUserEnum.PATIENT] } as never)).rejects.toBeInstanceOf(ForbiddenException);
   });
 });
 
@@ -243,8 +266,9 @@ describe('UserController (auth)', () => {
   });
   it('registro de un usuario', () => {
     const dto = { username: 'ana' };
-    controller.register(dto as never);
-    expect(service.register).toHaveBeenCalledWith(dto);
+    const actor = null;
+    controller.register(dto as never, actor);
+    expect(service.register).toHaveBeenCalledWith(dto, actor);
   });
   it('Encuentra usuarios por rol', () => {
     controller.findByRole(RoleUserEnum.PATIENT);
@@ -260,8 +284,9 @@ describe('UserController (auth)', () => {
   });
   it('Actualiza un usuario', () => {
     const dto = { phone: '123' };
-    controller.update(21, dto as never);
-    expect(service.update).toHaveBeenCalledWith(21, dto);
+    const actor = { cedUser: 21, roles: [RoleUserEnum.PATIENT] };
+    controller.update(21, dto as never, actor as never);
+    expect(service.update).toHaveBeenCalledWith(21, dto, actor);
   });
   it('Desactiva un usuario', () => {
     controller.deactivate(21);
